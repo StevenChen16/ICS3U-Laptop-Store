@@ -1,4 +1,3 @@
-// LaptopStoreSurveyFrame.java
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
@@ -223,7 +222,11 @@ public class LaptopStoreSurveyFrame extends JFrame {
     private void addEventListeners() {
         clearButton.addActionListener(e -> clearForm());
         backButton.addActionListener(e -> dispose());
-        continueButton.addActionListener(e -> getFilterValues());
+        continueButton.addActionListener(e -> {
+            Map<String, Object> filterValues = getFilterValues();
+            List<Laptop> filteredLaptops = filterLaptops(filterValues);
+            new LaptopStoreResultFrame(filteredLaptops);
+        });
     }
 
     private void clearForm() {
@@ -270,5 +273,71 @@ public class LaptopStoreSurveyFrame extends JFrame {
             }
         }
         return values;
+    }
+
+    private List<Laptop> filterLaptops(Map<String, Object> filterValues) {
+        List<Laptop> filteredLaptops = new ArrayList<>();
+        for (Laptop laptop : LaptopStoreApplication.laptopArray) {
+            boolean matches = true;
+            for (Map.Entry<String, Object> entry : filterValues.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                if (value == null) continue;
+
+                switch (key) {
+                    case "Brand":
+                        if (!laptop.getBrand().equals(value)) matches = false;
+                        break;
+                    case "Type (ex. Student; Professional; Gaming; etc.)":
+                        if (!laptop.getType().equals(value)) matches = false;
+                        break;
+                    case "CPU - Brand":
+                        if (!laptop.getCpuBrand().equals(value)) matches = false;
+                        break;
+                    case "GPU brand":
+                        if (!laptop.getGpuBrand().equals(value)) matches = false;
+                        break;
+                    case "OS":
+                        if (!laptop.getOs().equals(value)) matches = false;
+                        break;
+                    case "RAM - GB":
+                        if (laptop.getRam() != Integer.parseInt(value.toString())) matches = false;
+                        break;
+                    case "SSD (GB)":
+                        if (laptop.getSsd() != Integer.parseInt(value.toString())) matches = false;
+                        break;
+                    case "Rating (1-10)":
+                        if (laptop.getCustomerRating() < (int) value) matches = false;
+                        break;
+                    case "Speed Rating (1-10)":
+                        if (laptop.getSpeedRating() < (int) value) matches = false;
+                        break;
+                    case "USB ports":
+                        if (laptop.getUsbPorts() != Integer.parseInt(value.toString())) matches = false;
+                        break;
+                    case "other ports":
+                        if (!laptop.getOtherPorts().contains(value.toString())) matches = false;
+                        break;
+                    case "Disp. (in)":
+                        if (laptop.getDisplaySize() != Double.parseDouble(value.toString())) matches = false;
+                        break;
+                    case "Weight (lbs)":
+                        if (laptop.getWeight() != Double.parseDouble(value.toString())) matches = false;
+                        break;
+                    case "Touchscreen":
+                        if (laptop.isTouchscreen() != (boolean) value) matches = false;
+                        break;
+                    case "minPrice":
+                        if (laptop.getLaptopCost() < (double) value) matches = false;
+                        break;
+                    case "maxPrice":
+                        if (laptop.getLaptopCost() > (double) value) matches = false;
+                        break;
+                }
+                if (!matches) break;
+            }
+            if (matches) filteredLaptops.add(laptop);
+        }
+        return filteredLaptops;
     }
 }

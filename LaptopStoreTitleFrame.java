@@ -18,6 +18,8 @@ public class LaptopStoreTitleFrame extends JFrame implements ActionListener {
     private ImageIcon logo;
     private JLabel logoLabel;
     private JButton templateButton = new JButton("Template Frame");
+    private JButton inventoryButton = new JButton("Inventory Frame");
+    private JButton surveyButton = new JButton("Survey Frame");
     private JPanel mainPanel;
 
     // Constructor Method
@@ -76,39 +78,43 @@ public class LaptopStoreTitleFrame extends JFrame implements ActionListener {
         gbc.insets = new Insets(0, 0, 50, 0);
         mainPanel.add(logoLabel, gbc);
 
-        // Setup modern-looking button
-        setupButton();
+        // Setup modern-looking buttons
+        setupButton(templateButton);
+        setupButton(inventoryButton);
+        setupButton(surveyButton);
         gbc.insets = new Insets(0, 0, 0, 0);
         mainPanel.add(templateButton, gbc);
+        mainPanel.add(inventoryButton, gbc);
+        mainPanel.add(surveyButton, gbc);
     }
 
-    private void setupButton() {
-        templateButton.setPreferredSize(new Dimension(250, 60));
-        templateButton.setFont(new Font("Segoe UI", Font.BOLD, BUTTON_TEXT_SIZE));
-        templateButton.setForeground(Color.WHITE);
-        templateButton.setBackground(BUTTON_COLOR);
-        templateButton.setBorderPainted(false);
-        templateButton.setFocusPainted(false);
-        templateButton.setOpaque(true);
+    private void setupButton(JButton button) {
+        button.setPreferredSize(new Dimension(250, 60));
+        button.setFont(new Font("Segoe UI", Font.BOLD, BUTTON_TEXT_SIZE));
+        button.setForeground(Color.WHITE);
+        button.setBackground(BUTTON_COLOR);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setOpaque(true);
         
         // Create rounded corners
-        templateButton.setBorder(new EmptyBorder(10, 25, 10, 25));
-        templateButton.putClientProperty("JButton.buttonType", "roundRect");
+        button.setBorder(new EmptyBorder(10, 25, 10, 25));
+        button.putClientProperty("JButton.buttonType", "roundRect");
         
         // Add hover effect
-        templateButton.addMouseListener(new MouseAdapter() {
+        button.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
-                templateButton.setBackground(BUTTON_HOVER_COLOR);
+                button.setBackground(BUTTON_HOVER_COLOR);
                 setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
             
             public void mouseExited(MouseEvent e) {
-                templateButton.setBackground(BUTTON_COLOR);
+                button.setBackground(BUTTON_COLOR);
                 setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
         
-        templateButton.addActionListener(this);
+        button.addActionListener(this);
     }
 
     private void finalFrameSetup() {
@@ -124,6 +130,12 @@ public class LaptopStoreTitleFrame extends JFrame implements ActionListener {
         if (event.getSource() == templateButton) {
             setVisible(false);
             new LaptopStoreTemplateFrame();
+        } else if (event.getSource() == inventoryButton) {
+            setVisible(false);
+            new LaptopStoreInventoryFrame();
+        } else if (event.getSource() == surveyButton) {
+            setVisible(false);
+            new LaptopStoreSurveyFrame();
         }
     }
 }
@@ -132,6 +144,18 @@ class LaptopStoreTemplateFrame extends JFrame {
     public LaptopStoreTemplateFrame() {
         setSize(1000, 700);
         setTitle("Template Frame");
+        setLayout(new GridBagLayout());
+        setLocationRelativeTo(null);
+        setBackground(new Color(248, 249, 250));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+}
+
+class LaptopStoreInventoryFrame extends JFrame {
+    public LaptopStoreInventoryFrame() {
+        setSize(1000, 700);
+        setTitle("Inventory Frame");
         setLayout(new GridBagLayout());
         setLocationRelativeTo(null);
         setBackground(new Color(248, 249, 250));
